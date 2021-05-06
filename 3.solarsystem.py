@@ -11,15 +11,15 @@ from astropy.time import Time
 from datetime import datetime
 
 
-t = Time(datetime.today().isoformat())
-planets=('sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune')
+t = Time(datetime.today().isoformat()) #utilizamos el tiempo actual
+planets=('sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune') #lista con los planetas que se van a usar
 
-x,y,z,vx,vy,vz=ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1))
+x,y,z,vx,vy,vz=ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1)),ones((len(planets),1)) #arrays vacios donde se meteran los correspondientes datos de posicion y velocidad
 
 for i in range(len(planets)):
 	posvel=get_body_barycentric_posvel(planets[i],t)
 	pos,vel=posvel
-	pos=pos.xyz.to(u.m)
+	pos=pos.xyz.to(u.m) #cambiamos las unidades de los datos obtenidos ya que estos estan en UA y en UA/d
 	vel=vel.xyz.to(u.m/u.s)
 	x[i]=pos[0]
 	y[i]=pos[1]
@@ -49,7 +49,7 @@ msat=5.6846e26
 mura=8.6832e25
 mnep=1.0243e26
 
-M=array([msol,mmer,mven,mtie,mmar,mjup,msat,mura,mnep])
+M=array([msol,mmer,mven,mtie,mmar,mjup,msat,mura,mnep]) #array con todas las masas de los planetas
 
 #colores que vamos a usar
 
@@ -62,7 +62,7 @@ colJup='sandybrown'
 colSat='darkgoldenrod'
 colUra='mediumseagreen'
 colNep='mediumslateblue'
-colors=[colSol,colMer,colVen,colTie,colMar,colJup,colSat,colUra,colNep]
+colors=[colSol,colMer,colVen,colTie,colMar,colJup,colSat,colUra,colNep] #colores que se van a usar en matplotlib
 
 # años en segundos
 
@@ -75,11 +75,11 @@ segJup=400000000
 segSat=930000000
 segUra=2700000000
 segNep=5200000000
-seg=array([segSol,segMer,segVen,segTie,segMar,segJup,segSat,segUra,segNep])
+seg=array([segSol,segMer,segVen,segTie,segMar,segJup,segSat,segUra,segNep]) #tiempo de un año en segundos de todos los planetas (al Sol se le puso lo mismo que a Neptuno)
 
 tf=6000000000
 nin=60000
-tiempo=arange(0,tf,nin)
+tiempo=arange(0,tf,nin) #tiempo que se va a usar
 
 #definimos distintas funciones----------------------------------------------------
 
@@ -123,7 +123,7 @@ def diffPlanets(p):
 			x2,y2,z2,vx2,vy2,vz2=w[j]
 			R=r(x1,x2,y1,y2,z1,z2)
 			m=M[j]    
-			dvx_dt+=acel(R,m)[0]
+			dvx_dt+=acel(R,m)[0] #vamos sumando cada aceleración obtenida
 			dvy_dt+=acel(R,m)[1]
 			dvz_dt+=acel(R,m)[2]
 		diff[i]=array([dx_dt,dy_dt,dz_dt,dvx_dt,dvy_dt,dvz_dt])
@@ -133,7 +133,7 @@ def diffPlanets(p):
 
 def funder(t,p):
 		ar=diffPlanets(p)
-		return ar
+		return ar #creamos una función que acepte solve_ivp
 
 
 
@@ -153,8 +153,8 @@ for i in range(len(trayectorias)):
 	cuerpo=trayectorias[i]
 	x=cuerpo[0]
 	y=cuerpo[1]
-	plt.plot(x,y,colors[i],label=planets[i])
-	plt.plot([x[-1]],[y[-1]],markersize=5,color=colors[i],marker='o')
+	plt.plot(x,y,colors[i],label=planets[i])  #creamos una representación de todas las trayectorias
+	plt.plot([x[-1]],[y[-1]],markersize=5,color=colors[i],marker='o')#circulo que representa la posicion final de cada planeta
 
 plt.legend(loc=1)
 plt.title('Sistema Solar en un año de Neptuno')
