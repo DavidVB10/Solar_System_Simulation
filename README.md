@@ -7,6 +7,7 @@ For the programes to work, it's necessary to install all the used modules:
 -matplotlib
 -astropy
 -datetime
+-vpython
 
 It's important to remark astropy because it's not a common module.
 
